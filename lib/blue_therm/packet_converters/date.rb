@@ -2,11 +2,11 @@ module BlueTherm
   module PacketConverters
     class Date < Base
 
-      def to(bytes)
+      def deserialize_implementation(bytes)
 
       end
 
-      def from(date)
+      def serialize_implementation(date)
 
       end
 

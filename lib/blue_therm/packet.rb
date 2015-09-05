@@ -112,6 +112,8 @@ module BlueTherm
         }
     }
 
+    attr_reader :data
+
     def initialize(data = nil)
       @data = data || ([0] * 128)
     end
@@ -135,7 +137,7 @@ module BlueTherm
       raw_data = @data[opts[:index]]
       converter = opts[:converter].new(raw_data.length)
 
-      converter.to(raw_data)
+      converter.deserialize(raw_data)
     end
 
     def set_field(field, value)
@@ -145,7 +147,7 @@ module BlueTherm
       range = opts[:index].is_a?(Numeric) ? (opts[:index]..opts[:index]) : opts[:index]
       converter = opts[:converter].new(range.size)
 
-      bytes = converter.from(value)
+      bytes = converter.serialize(value)
 
       raise "Invalid byte count: #{bytes} expected to fit in #{range}" unless bytes.length == range.size
 

@@ -9,13 +9,26 @@ module BlueTherm
       end
 
       # Converts from a byte array to the desired type
-      def to(bytes)
-        bytes
+      def deserialize(bytes)
+        raise "Invalid byte count: #{bytes}. Expected length of #{length}" if bytes.length != length
+        deserialize_implementation(bytes)
       end
 
       # Converts from the type to a byte array
-      def from(data)
-        data
+      def serialize(data)
+        bytes = serialize_implementation(data)
+        raise "Invalid byte count: #{bytes}. Expected length of #{length}" if bytes.length != length
+        bytes
+      end
+
+      protected
+
+      def deserialize_implementation(bytes)
+        raise "Not Implemented"
+      end
+
+      def serialize_implementation(data)
+        raise "Not Implemented"
       end
 
     end
