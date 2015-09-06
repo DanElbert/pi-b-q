@@ -12,7 +12,7 @@ module BlueTherm
         },
         retrieve_or_set_bits: {
             index: (0x2..0x3),
-            converter: PacketConverters::Word
+            converter: PacketConverters::DataFlags
         },
         serial_number: {
             index: (0x4..0xD),
@@ -108,14 +108,35 @@ module BlueTherm
         },
         checksum: {
             index: (0x7E..0x7F),
-            converter: PacketConverters::None
+            converter: PacketConverters::Word
         }
     }
+
+    def self.default
+      p = self.new()
+      p.command_id = 1
+      p.version = 1
+      p.retrieve_or_set_bits = DataFlags.default
+      p.apply_checksum!
+    end
 
     attr_reader :data
 
     def initialize(data = nil)
       @data = data || ([0] * 128)
+    end
+
+    def calculate_checksum
+      CRC.checksum(self.data[(0..125)])
+    end
+
+    def apply_checksum!
+      self.checksum = self.calculate_checksum
+    end
+
+    def verify_checksum!
+      raise "Invalid checksum!" unless self.calculate_checksum == self.checksum
+      true
     end
 
     FIELDS.each do |f, _|
@@ -155,27 +176,6 @@ module BlueTherm
         @data[packet_index] = bytes[byte_index]
       end
     end
-    
-
-
-    GET_SET_BITS = [
-        :serial_number,
-        :probe_names,
-        :sensor_1_temperature,
-        :sensor_1_high_limit,
-        :sensor_1_low_limit,
-        :sensor_1_trim,
-        :sensor_2_temperature,
-        :sensor_2_high_limit,
-        :sensor_2_low_limit,
-        :sensor_2_trim,
-        :battery_condition,
-        :cal_value_1,
-        :cal_value_2,
-        :cal_value_3,
-        :firmware_version,
-        :types
-    ]
 
     COMMANDS = {
         nothing: 0x0,
