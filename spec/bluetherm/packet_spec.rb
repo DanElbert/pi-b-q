@@ -21,4 +21,10 @@ RSpec.describe BlueTherm::Packet do
     expect(p.data).not_to eq [0] * 128
   end
 
+  it 'validates the example packet from the docs' do
+    data = [1, 1, 0xFF, 0xFF] + ([0] * 122) + [0xA5, 0x88]
+    p = BlueTherm::Packet.new(data)
+    expect(p.verify_checksum!).to be true
+  end
+
 end
