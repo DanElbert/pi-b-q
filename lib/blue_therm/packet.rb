@@ -120,6 +120,11 @@ module BlueTherm
       p.apply_checksum!
     end
 
+    # Creates a packet based on the string output from the serial connection
+    def self.deserialize(data)
+      self.new(data.unpack('C*'))
+    end
+
     attr_reader :data
 
     def initialize(data = nil)
@@ -134,9 +139,17 @@ module BlueTherm
       self.checksum = self.calculate_checksum
     end
 
+    def verify_checksum
+      self.calculate_checksum == self.checksum
+    end
+
     def verify_checksum!
-      raise "Invalid checksum!" unless self.calculate_checksum == self.checksum
-      true
+      verify_checksum || (raise 'Invalid Checksum')
+    end
+
+    # Converts the byte array into a form that's easy for the serial connection to consume
+    def serialize
+      self.data.pack('C*')
     end
 
     FIELDS.each do |f, _|

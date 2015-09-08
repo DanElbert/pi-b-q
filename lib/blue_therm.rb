@@ -1,3 +1,5 @@
+require 'observer'
+require 'thread'
 
 
 require 'blue_therm/packet_converters/base'
@@ -13,4 +15,4 @@ require 'blue_therm/packet_converters/word'
 require 'blue_therm/crc'
 require 'blue_therm/data_flags'
 require 'blue_therm/packet'
-require 'blue_therm/port'
+require 'blue_therm/serial_connection'

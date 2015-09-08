@@ -3,7 +3,7 @@ module BlueTherm
   #
   # This code is a direct port of the example C# CRC implementation out of the BlueTherm Protocol Manual
   # Seems to work, so I'm not touching it.
-  class CRC
+  module CRC
     def self.checksum(bytes)
       crc = 0
       bytes.each do |b|
