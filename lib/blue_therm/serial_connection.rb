@@ -23,6 +23,7 @@ module BlueTherm
       SHUT_DOWN = 6
 
       def self.convert_from_command_id(id)
+        #TODO: set these constants to match the command_ids, like a sane person
         case id
           when 0
             DO_NOTHING
@@ -82,7 +83,7 @@ module BlueTherm
         end
 
         begin
-          data = @serial.read_nonblock
+          data = @serial.read_nonblock(128)
           if data.length > 0
             last_read = Time.now
             buffer += data
@@ -111,16 +112,20 @@ module BlueTherm
       response = nil
 
       observer = SendReceiveObserver.new do |m|
+        puts "In the spooky observer... #{m}"
         if m.type == MessageType::RETRIEVE_INFORMATION && m.timestamp >= now
           response = m
           self.delete_observer(observer)
         end
       end
 
+      self.add_observer(observer)
+
       @serial.write(data)
 
       until response || ((Time.now - now) >= MAX_RESPONSE_WAIT)
         sleep RESPONSE_WAIT
+        self.process_messages
       end
 
       if response

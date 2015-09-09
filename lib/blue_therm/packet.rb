@@ -118,6 +118,7 @@ module BlueTherm
       p.version = 1
       p.retrieve_or_set_bits = DataFlags.default
       p.apply_checksum!
+      p
     end
 
     # Creates a packet based on the string output from the serial connection
@@ -168,7 +169,7 @@ module BlueTherm
       opts = FIELDS[field]
       raise "Unknown field: #{field}" unless opts
 
-      raw_data = @data[opts[:index]]
+      raw_data = Array.wrap(@data[opts[:index]])
       converter = opts[:converter].new(raw_data.length)
 
       converter.deserialize(raw_data)
