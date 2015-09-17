@@ -17,6 +17,7 @@ Someday this thing may (or may not):
 1. `sudo pi_config/install.sh`  This takes eons; go get a beer.
 1. Make sure you've got a working Bluetooth adapter, then use hcitool and bluetooth-agent to pair your BT
 1. Update /etc/bluetooth/rfcomm.conf to map the BT to /dev/rfcomm0
+1. Restart the bluetooth stack: `sudo /etc/init.d/bluetooth restart`
 
 Now you can pop open a rails console and send and receive packets!
 
