@@ -11,6 +11,22 @@ Someday this thing may (or may not):
 * Continuously record temperature data
 * Provide a web interface to view recorded and near real-time data
 
+## Installation on a Raspberry Pi
+1. Start with a working, configured copy of Raspbian
+1. ssh into the pi, `sudo mkdir -p /var/www`, `cd /var/www`, `sudo git clone <THIS REPO>`, `cd pi-b-q`
+1. `sudo pi_config/install.sh`  This takes eons; go get a beer.
+1. Make sure you've got a working Bluetooth adapter, then use hcitool and bluetooth-agent to pair your BT
+1. Update /etc/bluetooth/rfcomm.conf to map the BT to /dev/rfcomm0
+
+Now you can pop open a rails console and send and receive packets!
+
+1. `rvmsudo rails c` (use sudo because we're lazy and don't want to set groups and permissions on the serial port)
+1. `serial = SerialPort.new('/dev/rfcomm0')`
+1. `conn = BlueTherm::SerialConnection.new(serial)`
+1. `response = conn.send(BlueTherm::Packet.default)`
+
+
+
 ## Some notes
 
 ### Pairing
