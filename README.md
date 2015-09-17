@@ -21,7 +21,7 @@ Someday this thing may (or may not):
 
 Now you can pop open a rails console and send and receive packets!
 
-1. `rvmsudo rails c` (use sudo because we're lazy and don't want to set groups and permissions on the serial port)
+1. `rvmsudo rails c` (use sudo because permissions are hard)
 1. `serial = SerialPort.new('/dev/rfcomm0')`
 1. `conn = BlueTherm::SerialConnection.new(serial)`
 1. `response = conn.send(BlueTherm::Packet.default)`
