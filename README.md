@@ -10,3 +10,9 @@ Someday this thing may (or may not):
 * Automatically connect to any paired BT device
 * Continuously record temperature data
 * Provide a web interface to view recorded and near real-time data
+
+## Some notes
+
+### Pairing
+* `hcitool scan` shows all bluetooth devices in range; use this to get ID
+* `bluetooth-agent 1234 <ID>` should pair the device

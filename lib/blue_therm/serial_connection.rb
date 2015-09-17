@@ -100,7 +100,7 @@ module BlueTherm
             buffer = buffer[128..-1]
           end
 
-        rescue IO::WaitReadable
+        rescue IO::WaitReadable, EOFError
           sleep READ_WAIT
         end
       end
