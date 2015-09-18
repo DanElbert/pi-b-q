@@ -10,6 +10,8 @@ def connect
   @conn.on_error { |m| puts "Bad Data: #{m}" }
 end
 
+connect
+
 while true
 
   begin
