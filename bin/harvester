@@ -39,10 +39,11 @@ while true
 
   rescue BlueTherm::TimeoutError, Errno::EIO => e
 
-    puts 'lost connection...'
+    unless failed
+      puts 'lost connection...'
+      failed = true
+    end
     puts "#{e}"
-
-    failed = true
 
     @conn.close
     @serial.close
