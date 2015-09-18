@@ -152,7 +152,7 @@ module BlueTherm
       if response
         response.packet
       else
-        raise BlueTherm::TimoutError
+        raise BlueTherm::TimeoutError
       end
     end
 
