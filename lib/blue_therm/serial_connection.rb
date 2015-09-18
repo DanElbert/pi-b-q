@@ -147,7 +147,6 @@ module BlueTherm
       self.add_observer(observer)
 
       @serial.write(data)
-      @serial.fsync
 
       until response || ((Time.now - now) >= MAX_RESPONSE_WAIT)
         sleep RESPONSE_WAIT
