@@ -12,6 +12,10 @@ def connect
   @conn.on_retrieve { |m| puts "Got Retrieve Packet at #{m.timestamp}" }
 end
 
+def c_to_f(c)
+  ((c * 1.8) + 32).round(3)
+end
+
 connect
 
 while true
@@ -23,8 +27,8 @@ while true
     request = BlueTherm::Packet.default
     response = @conn.send(request)
 
-    puts "Sensor 1: #{response.sensor_1_reading}"
-    puts "Sensor 2: #{response.sensor_2_reading}"
+    puts "Sensor 1: #{c_to_f(response.sensor_1_reading)}"
+    puts "Sensor 2: #{c_to_f(response.sensor_2_reading)}"
 
   rescue BlueTherm::TimeoutError, Errno::EIO => e
 
