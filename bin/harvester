@@ -22,7 +22,11 @@ while true
     puts "Sensor 1: #{response.sensor_1_reading}"
     puts "Sensor 2: #{response.sensor_2_reading}"
 
-  rescue BlueTherm::TimeoutError, Errno::EIO
+  rescue BlueTherm::TimeoutError, Errno::EIO => e
+
+    puts '============'
+    puts "Yer stuff's broke, yo\n\n#{e}"
+    puts '============'
 
     @conn.close
     @serial.close
