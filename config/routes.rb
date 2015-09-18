@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  root to: 'reading#index'
+
+  get 'data' => 'reading#data', constraints: { format: 'json' }
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
