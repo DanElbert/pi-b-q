@@ -26,13 +26,16 @@ while true
 
     @conn.process_messages
 
-    request = BlueTherm::Packet.default
+    request = BlueTherm::Packet.temps
     response = @conn.send(request)
 
     if failed
       puts "Connection Resotred!"
       failed = false
     end
+
+    Reading.create!({probe: "1", value: response.sensor_1_reading})
+    Reading.create!({probe: "2", value: response.sensor_2_reading})
 
     puts "Sensor 1: #{c_to_f(response.sensor_1_reading)}"
     puts "Sensor 2: #{c_to_f(response.sensor_2_reading)}"

@@ -121,6 +121,15 @@ module BlueTherm
       p
     end
 
+    def self.temps
+      p = self.new()
+      p.command_id = 1
+      p.version = 1
+      p.retrieve_or_set_bits = DataFlags.temps
+      p.apply_checksum!
+      p
+    end
+
     # Creates a packet based on the string output from the serial connection
     def self.deserialize(data)
       self.new(data.unpack('C*'))
