@@ -4,6 +4,7 @@ require File.expand_path('../../config/environment', __FILE__)
 
 def connect
   @serial = SerialPort.new('/dev/rfcomm0')
+  @serial.sync = true
   @serial.binmode
   @conn = BlueTherm::SerialConnection.new(@serial)
 
