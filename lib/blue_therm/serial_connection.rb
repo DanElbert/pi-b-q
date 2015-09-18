@@ -61,12 +61,34 @@ module BlueTherm
       @read_thread.abort_on_exception = true
     end
 
+    def close
+      @read_thread.kill
+    end
+
     def process_messages
       until @incoming_q.empty?
         m = @incoming_q.pop
         self.changed
         self.notify_observers(m)
       end
+    end
+
+    def on_button(&block)
+      on_message(MessageType::BUTTON_PRESS, &block)
+    end
+
+    def on_error(&block)
+      on_message(MessageType::ERROR, &block)
+    end
+
+    def on_message(type, &block)
+      observer = SendReceiveObserver.new do |m|
+        if m.type == type
+          yield(m)
+        end
+      end
+
+      self.add_observer(observer)
     end
 
     def read_loop
@@ -112,7 +134,6 @@ module BlueTherm
       response = nil
 
       observer = SendReceiveObserver.new do |m|
-        puts "In the spooky observer... #{m}"
         if m.type == MessageType::RETRIEVE_INFORMATION && m.timestamp >= now
           response = m
           self.delete_observer(observer)
@@ -131,7 +152,7 @@ module BlueTherm
       if response
         response.packet
       else
-        raise "Timeout"
+        raise BlueTherm::TimoutError
       end
     end
 

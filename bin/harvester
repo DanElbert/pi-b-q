@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../../config/environment', __FILE__)
+
+def connect
+  @serial = SerialPort.new('/dev/rfcomm0')
+  @conn = BlueTherm::SerialConnection.new(@serial)
+
+  @conn.on_button { |m| puts "Button Pressed" }
+  @conn.on_error { |m| puts "Bad Data: #{m}" }
+end
+
+while true
+
+  begin
+
+    @conn.process_messages
+
+    request = BlueTherm::Packet.default
+    response = @conn.send(request)
+
+    puts "Sensor 1: #{response.sensor_1_reading}"
+    puts "Sensor 2: #{response.sensor_2_reading}"
+
+  rescue BlueTherm::TimeoutError, Errno::EIO
+
+    @conn.close
+    @serial.close
+
+    connect
+  end
+
+  sleep 1
+
+end
