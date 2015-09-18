@@ -81,6 +81,10 @@ module BlueTherm
       on_message(MessageType::ERROR, &block)
     end
 
+    def on_retrieve(&block)
+      on_message(MessageType::RETRIEVE_INFORMATION, &block)
+    end
+
     def on_message(type, &block)
       observer = SendReceiveObserver.new do |m|
         if m.type == type

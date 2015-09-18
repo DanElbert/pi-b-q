@@ -8,6 +8,7 @@ def connect
 
   @conn.on_button { |m| puts "Button Pressed" }
   @conn.on_error { |m| puts "Bad Data: #{m}" }
+  @conn.on_retrieve { |m| puts "Got Retrieve Packet at #{m.timestamp}" }
 end
 
 connect
@@ -27,7 +28,7 @@ while true
   rescue BlueTherm::TimeoutError, Errno::EIO => e
 
     puts '============'
-    puts "Yer stuff's broke, yo\n\n#{e}"
+    puts "Yer stuff's broke, yo\n#{e}"
     puts '============'
 
     @conn.close
