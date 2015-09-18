@@ -110,6 +110,7 @@ module BlueTherm
         end
 
         begin
+          data = ''
           @serial_mutex.synchronize { data = @serial.read_nonblock(128) }
           if data.length > 0
             last_read = Time.now
