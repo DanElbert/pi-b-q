@@ -16,6 +16,8 @@ def c_to_f(c)
   ((c * 1.8) + 32).round(3)
 end
 
+failed = false
+
 connect
 
 while true
@@ -27,14 +29,20 @@ while true
     request = BlueTherm::Packet.default
     response = @conn.send(request)
 
+    if failed
+      puts "Connection Resotred!"
+      failed = false
+    end
+
     puts "Sensor 1: #{c_to_f(response.sensor_1_reading)}"
     puts "Sensor 2: #{c_to_f(response.sensor_2_reading)}"
 
   rescue BlueTherm::TimeoutError, Errno::EIO => e
 
-    puts '============'
-    puts "Yer stuff's broke, yo\n#{e}"
-    puts '============'
+    puts 'lost connection...'
+    puts "#{e}"
+
+    failed = true
 
     @conn.close
     @serial.close
