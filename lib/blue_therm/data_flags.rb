@@ -18,6 +18,15 @@ module BlueTherm
       )
     end
 
+    def self.temps
+      self.new(
+          {
+              sensor_1_temperature: true,
+              sensor_2_temperature: true
+          }
+      )
+    end
+
     attr_reader :word
 
     def initialize(data = 0xFF)

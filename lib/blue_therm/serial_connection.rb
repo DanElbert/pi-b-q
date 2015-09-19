@@ -56,7 +56,6 @@ module BlueTherm
     def initialize(serial_port)
       @serial = serial_port
       @incoming_q = Queue.new
-      @serial_mutex = Mutex.new
 
       @read_thread = Thread.new { read_loop }
       @read_thread.abort_on_exception = true
@@ -97,7 +96,7 @@ module BlueTherm
     end
 
     def read_loop
-      @serial_mutex.synchronize { @serial.flush_input }
+      #@serial.flush_input
       buffer = ''
       last_read = Time.now - 100_000 # set last read to a bit over a day ago
       while true
@@ -110,8 +109,7 @@ module BlueTherm
         end
 
         begin
-          data = ''
-          @serial_mutex.synchronize { data = @serial.read_nonblock(128) }
+          data = @serial.read_nonblock(128)
           if data.length > 0
             last_read = Time.now
             buffer += data
@@ -148,7 +146,7 @@ module BlueTherm
 
       self.add_observer(observer)
 
-      @serial_mutex.synchronize { @serial.write(data) }
+      @serial.write(data)
 
       until response || ((Time.now - now) >= MAX_RESPONSE_WAIT)
         sleep RESPONSE_WAIT

@@ -4,6 +4,7 @@ require File.expand_path('../../config/environment', __FILE__)
 
 def connect
   @serial = SerialPort.new('/dev/rfcomm0')
+  @serial.sync = true
   @serial.binmode
   @conn = BlueTherm::SerialConnection.new(@serial)
 
@@ -16,7 +17,7 @@ def c_to_f(c)
   ((c * 1.8) + 32).round(3)
 end
 
-failed = false
+connected = false
 
 connect
 
@@ -26,24 +27,33 @@ while true
 
     @conn.process_messages
 
-    request = BlueTherm::Packet.default
+    request = BlueTherm::Packet.temps
     response = @conn.send(request)
 
-    if failed
+    unless connected
       puts "Connection Resotred!"
-      failed = false
+      connected = true
+      ConnectionStatus.create!({is_connect: true, info: 'Connection Established'})
     end
+
+    Reading.create!({probe: "1", value: response.sensor_1_reading})
+    Reading.create!({probe: "2", value: response.sensor_2_reading})
 
     puts "Sensor 1: #{c_to_f(response.sensor_1_reading)}"
     puts "Sensor 2: #{c_to_f(response.sensor_2_reading)}"
 
   rescue BlueTherm::TimeoutError, Errno::EIO => e
 
-    unless failed
+    new_disconnect = false
+
+    if connected
       puts 'lost connection...'
-      failed = true
+      connected = false
+      new_disconnect = true
     end
     puts "#{e}: #{e.message}"
+
+    ConnectionStatus.create!({is_disconnect: new_disconnect, info: "[#{e.class}]  #{e.message}"})
 
     @conn.close
     @serial.close
