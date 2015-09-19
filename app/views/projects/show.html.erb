@@ -25,6 +25,8 @@
         data = data.concat(mappedData);
       }
 
+      newestTimestamp = data[data.length - 1][0];
+
       if (graph == null) {
         buildGraph();
       } else {
