@@ -13,4 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require dygraph
+//= require underscore
 //= require_tree .

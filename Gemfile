@@ -18,6 +18,9 @@ gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 
+gem 'oj'
+gem 'oj_mimic_json'
+
 gem 'serialport', '~> 1.3.1'
 
 # Use ActiveModel has_secure_password

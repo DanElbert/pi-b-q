@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @project.name %></h1>
+
+<div id="chart"></div>
+
+<script type="text/javascript">
+
+  var stuff = null;
+
+  $.getJSON('<%= project_data_path(@project) %>', function (data) {
+
+    stuff = data;
+
+    var mappedData = _.map(data, function(r) {
+      return [new Date(r.timestamp), r.value1, r.value2];
+    });
+
+    var graph = new Dygraph(document.getElementById("chart"),
+        mappedData,
+        {
+          labels: ["x", "Sensor 1", "Sensor 2"]
+        });
+
+
+  });
+
+</script>
+
+
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Home', projects_path %>

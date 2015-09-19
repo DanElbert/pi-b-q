@@ -36,8 +36,7 @@ while true
       ConnectionStatus.create!({is_connect: true, info: 'Connection Established'})
     end
 
-    Reading.create!({probe: "1", value: response.sensor_1_reading})
-    Reading.create!({probe: "2", value: response.sensor_2_reading})
+    Reading.create!({value1: response.sensor_1_reading, value2: response.sensor_2_reading, timestamp: Time.now})
 
     puts "Sensor 1: #{c_to_f(response.sensor_1_reading)}"
     puts "Sensor 2: #{c_to_f(response.sensor_2_reading)}"

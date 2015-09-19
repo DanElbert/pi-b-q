@@ -11,6 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150919004115) do
+
+  create_table "connection_statuses", force: :cascade do |t|
+    t.boolean  "is_connect"
+    t.boolean  "is_disconnect"
+    t.text     "info"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string   "name",         null: false
+    t.datetime "start",        null: false
+    t.datetime "end",          null: false
+    t.string   "sensor1_name"
+    t.string   "sensor2_name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "readings", force: :cascade do |t|
+    t.float    "value1"
+    t.float    "value2"
+    t.datetime "timestamp", null: false
+  end
 
 end

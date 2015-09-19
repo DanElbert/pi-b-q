@@ -1,11 +1,12 @@
 class Reading < ActiveRecord::Base
 
-  def in_fahrenheit
-    (self.value * 1.8) + 32
-  end
+  validates :timestamp, presence: true
 
-  def in_celsius
-    self.value
+  scope :for_project, ->(project) { where('timestamp >= ? AND timestamp <= ?', project.start, project.end) }
+  scope :after, ->(date) { where('timestamp > ?', date) }
+
+  def to_fahrenheit(v)
+    (v * 1.8) + 32
   end
 
 end
