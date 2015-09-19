@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
 
     if after.present?
       begin
-        after = Time.parse(after)
+        after = Time.parse(after).utc
       rescue ArgumentError
         after = nil
       end
