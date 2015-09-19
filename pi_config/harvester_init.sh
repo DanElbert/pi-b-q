@@ -29,7 +29,7 @@ case "$1" in
     echo "Starting $APP_NAME"
     echo "su - $USER -c \"$HARVESTER\" start"
     cd $APP_DIR
-    su - $USER -c "$HARVESTER" start
+    su - $USER -c "$HARVESTER start"
     ;;
   stop)
     echo "Stopping $APP_NAME"
