@@ -3,4 +3,15 @@
 require_relative '../config/boot'
 require 'daemons'
 
-Daemons.run('harvester')
+rails_dir = File.expand_path('../..',  __FILE__)
+
+
+
+Daemons.run("#{rails_dir}/bin/harvester",
+            {
+                app_name: 'harvester',
+                dir_mode: :normal,
+                dir: "#{rails_dir}/tmp/pids",
+                multiple: false,
+                log_output: true
+            })
