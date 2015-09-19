@@ -9,7 +9,7 @@
 
 #PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-CMD="source /usr/local/rvm/scripts/rvm && /var/www/pi-b-q/bin/web_control"
+CMD="source /usr/local/rvm/scripts/rvm && rvm use 2.2.1 && /var/www/pi-b-q/bin/web_control"
 APP_DIR="/var/www/pi-b-q"
 APP_NAME="pi-b-q web"
 USER="pi"
@@ -21,8 +21,6 @@ export RAILS_ENV=production
 [ -f "$ENV_FILE" ] && . $ENV_FILE
 
 . /lib/lsb/init-functions
-
-rvm use 2.2.1
 
 case "$1" in
   start)
