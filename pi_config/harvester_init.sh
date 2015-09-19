@@ -12,7 +12,7 @@
 HARVESTER="/var/www/pi-b-q/bin/harvester_control"
 APP_DIR="/var/www/pi-b-q"
 RAILS_ENV=production
-APP_NAME=pi-b-q harvester
+APP_NAME="pi-b-q harvester"
 USER="pi"
 ENV_FILE=/etc/default/harvester
 
