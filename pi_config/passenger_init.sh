@@ -19,6 +19,10 @@ USER="pi"
 SET_PATH="cd $APP_DIR"
 PRE_CMD="" # e.g. "SENDGRID_USERNAME=username"
 CMD="$SET_PATH; $PRE_CMD $PASSENGER start -a $ADDRESS -p $PORT -e $ENVIRONMENT -d"
+ENV_FILE=/etc/default/pi-bi-q
+
+# Source the env file if it exists
+[ -f "$ENV_FILE" ] && . $ENV_FILE
 
 . /lib/lsb/init-functions
 . /usr/local/rvm/scripts/rvm
