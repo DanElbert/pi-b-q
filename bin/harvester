@@ -43,7 +43,7 @@ while true
       puts 'lost connection...'
       failed = true
     end
-    puts "#{e}"
+    puts "#{e}: #{e.message}"
 
     @conn.close
     @serial.close
