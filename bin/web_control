@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require_relative '../config/boot'
+require 'daemons'
+
+rails_dir = File.expand_path('../..',  __FILE__)
+
+Daemons.run("#{rails_dir}/bin/rails",
+            {
+                app_name: 'pi-b-q',
+                dir_mode: :normal,
+                dir: "#{rails_dir}/tmp/pids",
+                multiple: false,
+                log_output: true,
+                ARGV: ARGV + ['--', 'server', '-p', '8080', '-b', '0.0.0.0']
+            })
