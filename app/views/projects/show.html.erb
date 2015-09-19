@@ -1,16 +1,21 @@
-<p id="notice"><%= notice %></p>
+<div id="header">
+  <h1><%= @project.name %></h1>
 
-<h1><%= @project.name %></h1>
+  <div id="current_status">
+    <label for="reading1"><%= @project.sensor1_name %></label><span id="reading1">NULL</span>
+    <br/>
+    <label for="reading2"><%= @project.sensor2_name %></label><span id="reading2">NULL</span>
+    <br/>
+    <label id="status">DISCONNECTED</label>
+  </div>
 
-<div id="current_status">
-  <label for="reading1"><%= @project.sensor1_name %></label><span id="reading1">NULL</span>
-  <br/>
-  <label for="reading2"><%= @project.sensor2_name %></label><span id="reading2">NULL</span>
-  <br/>
-  <label id="status">DISCONNECTED</label>
+  <div id="nav">
+    <%= link_to 'Home', projects_path %> |
+    <%= link_to 'Edit Project', edit_project_path(@project) %>
+  </div>
 </div>
 
-<div id="chart" style="width: 1000px; height: 700px;"></div>
+<div id="chart"></div>
 
 <script type="text/javascript">
 
@@ -82,6 +87,3 @@
 
 </script>
 
-
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Home', projects_path %>
