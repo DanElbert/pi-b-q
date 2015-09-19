@@ -6,24 +6,43 @@
 
 <script type="text/javascript">
 
-  var stuff = null;
+  var data = null;
+  var newestTimestamp = null;
+  var graph = null;
 
-  $.getJSON('<%= project_data_path(@project) %>', function (data) {
+  renewData();
 
-    stuff = data;
+  function renewData() {
+    $.getJSON('<%= project_data_path(@project) %>', {after: newestTimestamp}, function (json) {
 
-    var mappedData = _.map(data, function(r) {
-      return [new Date(r.timestamp), r.value1, r.value2];
+      var mappedData = _.map(json, function(r) {
+        return [new Date(r.timestamp), r.value1, r.value2];
+      });
+
+      if (data == null) {
+        data = mappedData;
+      } else {
+        data = data.concat(mappedData);
+      }
+
+      if (graph == null) {
+        buildGraph();
+      } else {
+        graph.updateOptions({file: data});
+      }
+
+      setTimeout(renewData, 2000);
+
     });
+  }
 
-    var graph = new Dygraph(document.getElementById("chart"),
-        mappedData,
+  function buildGraph() {
+    graph = new Dygraph(document.getElementById("chart"),
+        data,
         {
           labels: ["x", "Sensor 1", "Sensor 2"]
         });
-
-
-  });
+  }
 
 </script>
 

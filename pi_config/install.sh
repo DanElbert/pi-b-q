@@ -20,8 +20,21 @@ rvm use 2.2.1
 
 # Install bootstrapping gems
 gem install bundler
-gem install passenger
 
 # Install application gems
 bundle install
+
+# Copy init files
+cp /var/www/pi-b-q/pi_config/harvester_init.sh /var/www/pi-b-q/pi_config/web_init.sh /etc/init.d/
+chmod +x /etc/init.d/harvester_init.sh /etc/init.d/web_init.sh
+
+# Create DB
+RAILS_ENV=production rake db:create db:migrate
+
+# Compile assets
+RAILS_ENV=production rake assets:precompile
+
+# Open permissions
+chown -R :www-data /var/www/pi-b-q
+chmod -R g+w /var/www/pi-b-q/tmp /var/www/pi-b-q/log
 
