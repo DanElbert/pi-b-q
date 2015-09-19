@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150919004115) do
+ActiveRecord::Schema.define(version: 20150919141039) do
 
   create_table "connection_statuses", force: :cascade do |t|
     t.boolean  "is_connect"
@@ -36,5 +36,7 @@ ActiveRecord::Schema.define(version: 20150919004115) do
     t.float    "value2"
     t.datetime "timestamp", null: false
   end
+
+  add_index "readings", ["timestamp"], name: "index_readings_on_timestamp"
 
 end

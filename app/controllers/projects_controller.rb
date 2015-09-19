@@ -22,6 +22,8 @@ class ProjectsController < ApplicationController
     end
 
     @readings = @readings.after(after) if after.present?
+
+    @status = ConnectionStatus.order(:created_at).last
   end
 
   # GET /projects/1

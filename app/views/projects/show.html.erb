@@ -2,6 +2,11 @@
 
 <h1><%= @project.name %></h1>
 
+<div id="current_status">
+  <label for="reading1"><%= @project.sensor1_name %></label><span id="reading1">NULL</span>
+  <label for="reading2"><%= @project.sensor2_name %></label><span id="reading2">NULL</span>
+</div>
+
 <div id="chart" style="width: 1000px; height: 700px;"></div>
 
 <script type="text/javascript">
@@ -9,16 +14,16 @@
   var data = null;
   var newestTimestamp = null;
   var graph = null;
+  var lastGraphRefresh = null;
+  var graphRefreshInterval = 10 * 1000; // in milliseconds
 
   renewData();
 
   function renewData() {
     $.getJSON('<%= project_data_path(@project) %>', {after: newestTimestamp}, function (json) {
 
-      console.log(json);
-
-      if (json.length > 0) {
-        var mappedData = _.map(json, function(r) {
+      if (json.readings.length > 0) {
+        var mappedData = _.map(json.readings, function(r) {
           return [new Date(r.timestamp), r.value1, r.value2];
         });
 
@@ -28,12 +33,20 @@
           data = data.concat(mappedData);
         }
 
-        newestTimestamp = data[data.length - 1][0];
+        var lastReading = data[data.length - 1];
+
+        if (lastReading) {
+          newestTimestamp = lastReading[0];
+          $("#reading1").html(lastReading[1]);
+          $("#reading2").html(lastReading[2]);
+        }
 
         if (graph == null) {
           buildGraph();
-        } else {
+          lastGraphRefresh = Date.now();
+        } else if ((Date.now() - lastGraphRefresh) >= graphRefreshInterval) {
           graph.updateOptions({file: data});
+          lastGraphRefresh = Date.now();
         }
       }
 
@@ -46,7 +59,7 @@
     graph = new Dygraph(document.getElementById("chart"),
         data,
         {
-          labels: ["x", "Sensor 1", "Sensor 2"]
+          labels: ["x", "<%= @project.sensor1_name %>", "<%= @project.sensor2_name %>"]
         });
   }
 
