@@ -15,22 +15,24 @@
   function renewData() {
     $.getJSON('<%= project_data_path(@project) %>', {after: newestTimestamp}, function (json) {
 
-      var mappedData = _.map(json, function(r) {
-        return [new Date(r.timestamp), r.value1, r.value2];
-      });
+      if (json.length > 0) {
+        var mappedData = _.map(json, function(r) {
+          return [new Date(r.timestamp), r.value1, r.value2];
+        });
 
-      if (data == null) {
-        data = mappedData;
-      } else {
-        data = data.concat(mappedData);
-      }
+        if (data == null) {
+          data = mappedData;
+        } else {
+          data = data.concat(mappedData);
+        }
 
-      newestTimestamp = data[data.length - 1][0];
+        newestTimestamp = data[data.length - 1][0];
 
-      if (graph == null) {
-        buildGraph();
-      } else {
-        graph.updateOptions({file: data});
+        if (graph == null) {
+          buildGraph();
+        } else {
+          graph.updateOptions({file: data});
+        }
       }
 
       setTimeout(renewData, 2000);

@@ -12,6 +12,15 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:project_id])
     after = params[:after]
     @readings = Reading.for_project(@project)
+
+    if after.present?
+      begin
+        after = Time.parse(after)
+      rescue ArgumentError
+        after = nil
+      end
+    end
+
     @readings = @readings.after(after) if after.present?
   end
 
