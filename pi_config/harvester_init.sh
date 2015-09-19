@@ -34,12 +34,12 @@ case "$1" in
   stop)
     echo "Stopping $APP_NAME"
     cd $APP_DIR
-    $HARVESTER stop
+    su - $USER -c "$HARVESTER stop"
     ;;
   restart)
     echo "Restarting $APP_NAME"
     cd $APP_DIR
-    $HARVESTER restart
+    su - $USER -c "$HARVESTER restart"
     ;;
   *)
     echo "Usage: $0 start|stop|restart" >&2

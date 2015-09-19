@@ -34,12 +34,12 @@ case "$1" in
   stop)
     echo "Stopping $APP_NAME"
     cd $APP_DIR
-    $CMD stop
+    su - $USER -c "$CMD stop"
     ;;
   restart)
     echo "Restarting $APP_NAME"
     cd $APP_DIR
-    $CMD restart
+    su - $USER -c "$CMD restart"
     ;;
   *)
     echo "Usage: $0 start|stop|restart" >&2
