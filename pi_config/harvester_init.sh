@@ -27,7 +27,7 @@ rvm use 2.2.1
 case "$1" in
   start)
     echo "Starting $APP_NAME"
-    echo "su - $USER -c \"$CMD\""
+    echo "su - $USER -c \"$HARVESTER\" start"
     cd $APP_DIR
     su - $USER -c "$HARVESTER" start
     ;;
