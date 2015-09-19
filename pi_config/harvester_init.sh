@@ -11,10 +11,11 @@
 
 HARVESTER="/var/www/pi-b-q/bin/harvester_control"
 APP_DIR="/var/www/pi-b-q"
-RAILS_ENV=production
 APP_NAME="pi-b-q harvester"
 USER="pi"
 ENV_FILE=/etc/default/harvester
+
+export RAILS_ENV=production
 
 # Source the env file if it exists
 [ -f "$ENV_FILE" ] && . $ENV_FILE

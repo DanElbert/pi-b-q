@@ -11,10 +11,11 @@
 
 CMD="/var/www/pi-b-q/bin/web_control"
 APP_DIR="/var/www/pi-b-q"
-RAILS_ENV=production
 APP_NAME="pi-b-q web"
 USER="pi"
 ENV_FILE=/etc/default/pi-b-q
+
+export RAILS_ENV=production
 
 # Source the env file if it exists
 [ -f "$ENV_FILE" ] && . $ENV_FILE
