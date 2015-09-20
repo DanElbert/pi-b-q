@@ -12,6 +12,8 @@
   <div id="nav">
     <%= link_to 'Home', projects_path %> |
     <%= link_to 'Edit Project', edit_project_path(@project) %>
+    <br/>
+    <label id="last_update"></label>
   </div>
 </div>
 
@@ -53,6 +55,7 @@
           newestTimestamp = lastReading[0];
           $("#reading1").html(lastReading[1]);
           $("#reading2").html(lastReading[2]);
+          $("#last_update").html("Last Update: " + lastReading[0]);
         }
 
         if (graph == null) {
@@ -73,7 +76,9 @@
     graph = new Dygraph(document.getElementById("chart"),
         data,
         {
-          labels: ["x", "<%= @project.sensor1_name %>", "<%= @project.sensor2_name %>"]
+          labels: ["x", "<%= @project.sensor1_name %>", "<%= @project.sensor2_name %>"],
+          ylabel: 'Temperature (F)',
+          animatedZooms: true
         });
   }
 
