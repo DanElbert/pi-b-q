@@ -9,7 +9,7 @@
 
 if ['development', 'test'].include?(Rails.env)
 
-  Project.create!({name: 'Test', start: Time.new(2015, 9, 2, 12), end: Time.new(2015, 9, 2, 21), sensor1_name: '1', sensor2_name: '2'})
+  Project.create!({name: 'Test', start: Time.new(2015, 9, 2, 12), end: Time.new(2015, 9, 2, 16), sensor1_name: 'meat', sensor2_name: 'smoker'})
 
   t = Time.new(2015, 9, 2, 12)
   end_t = Time.new(2015, 9, 2, 21)
@@ -22,8 +22,8 @@ if ['development', 'test'].include?(Rails.env)
       Reading.create!({timestamp: t, value1: v1, value2: v2})
 
       t += 2
-      v1 += 0.75
-      v2 += 0.25
+      v1 += (-1.5 + Random.rand(3.1))
+      v2 += (-1.5 + Random.rand(3.1))
     end
   end
 

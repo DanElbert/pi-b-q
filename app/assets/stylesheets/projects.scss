@@ -3,30 +3,24 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 #header {
-  height: 75px;
+  background-color: $brand-primary;
+  color: #fff;
 
-  h1 {
-    float: left;
-    width: 100px;
-  }
-
-  #nav {
-    float: left;
+  a {
+    color: #fff;
   }
 }
 
-#current_status {
-  float: left;
-  width: 150px;
+#status {
+  padding: 5px;
+  font-size: 2em;
 
-  label {
-    border: 1px solid black;
-    margin: 0 5px 0 0;
+  &.good {
+    color: $brand-success;
   }
 
-  span {
-    font-weight: bold;
-    font-size: 125%;
+  &.bad {
+    color: $brand-info;
   }
 }
 

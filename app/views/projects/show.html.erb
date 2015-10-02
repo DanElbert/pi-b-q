@@ -1,23 +1,37 @@
-<div id="header">
-  <h1><%= @project.name %></h1>
 
-  <div id="current_status">
-    <label for="reading1"><%= @project.sensor1_name %></label><span id="reading1">NULL</span>
-    <br/>
-    <label for="reading2"><%= @project.sensor2_name %></label><span id="reading2">NULL</span>
-    <br/>
-    <label id="status">DISCONNECTED</label>
+<div id="header" class="row">
+  <div class="col-xs-4 col-sm-3 col-md-2">
+    <h3>
+      <%= link_to @project.name, root_path %>
+    </h3>
+  </div>
+  <div class="col-xs-4 col-sm-2 col-lg-1">
+    <button class="btn btn-primary" type="button">
+      <%= @project.sensor1_name %> <span id="reading1" class="badge"></span>
+    </button>
+  </div>
+  <div class="col-xs-4 col-sm-2 col-lg-1">
+    <button class="btn btn-primary" type="button">
+      <%= @project.sensor2_name %> <span id="reading2" class="badge"></span>
+    </button>
   </div>
 
-  <div id="nav">
-    <%= link_to 'Home', projects_path %> |
-    <%= link_to 'Edit Project', edit_project_path(@project) %>
-    <br/>
-    <label id="last_update"></label>
+  <div class="col-xs-4 col-sm-2">
+    <span id="last_update"></span>
+  </div>
+
+  <div class="col-xs-1">
+    <button class="btn btn-primary" type="button">
+      <span id="status"></span>
+    </button>
   </div>
 </div>
 
-<div id="chart"></div>
+
+
+<div id="chart_row" class="row">
+  <div id="chart"></div>
+</div>
 
 <script type="text/javascript">
 
@@ -26,6 +40,8 @@
   var graph = null;
   var lastGraphRefresh = null;
   var graphRefreshInterval = 10 * 1000; // in milliseconds
+  var sensor1Name = "<%= @project.sensor1_name %>";
+  var sensor2Name = "<%= @project.sensor2_name %>";
 
   renewData();
 
@@ -33,9 +49,9 @@
     $.getJSON('<%= project_data_path(@project) %>', {after: newestTimestamp}, function (json) {
 
       if (json.connected) {
-        $("#status").html("Connected").css("color", "black");
+        $("#status").removeClass().addClass("glyphicon glyphicon-transfer good");
       } else {
-        $("#status").html("DISCONNECTED").css("color", "red");
+        $("#status").removeClass().addClass("glyphicon glyphicon-ban-circle bad");
       }
 
       if (json.readings.length > 0) {
@@ -53,9 +69,9 @@
 
         if (lastReading) {
           newestTimestamp = lastReading[0];
-          $("#reading1").html(lastReading[1]);
-          $("#reading2").html(lastReading[2]);
-          $("#last_update").html("Last Update: " + lastReading[0]);
+          $("#reading1").html(round(lastReading[1]));
+          $("#reading2").html(round(lastReading[2]));
+          $("#last_update").html("Last Update: " + formatTime(lastReading[0]));
         }
 
         if (graph == null) {
@@ -76,9 +92,19 @@
     graph = new Dygraph(document.getElementById("chart"),
         data,
         {
-          labels: ["x", "<%= @project.sensor1_name %>", "<%= @project.sensor2_name %>"],
+          labels: ["x", sensor1Name, sensor2Name],
+          legend: 'always',
+          labelsSeparateLines: true,
           ylabel: 'Temperature (F)',
-          animatedZooms: true
+          animatedZooms: true,
+          valueFormatter: function(val, opts, seriesName, dygraph, row, col) {
+            if (seriesName == "x") {
+              var date = new Date(val);
+              return "<strong>" + formatTime(date) + "</strong>";
+            } else if (seriesName == sensor1Name || seriesName == sensor2Name) {
+              return round(val);
+            }
+          }
         });
   }
 
@@ -86,8 +112,23 @@
     if (!v)
       return null;
 
-    var converted = (v * 1.8) + 32;
-    return Math.round(converted * 1000) / 1000.0;
+    return (v * 1.8) + 32;
+  }
+
+  function round(val) {
+    return Math.round(val * 100) / 100.0;
+  }
+
+  function formatTime(val) {
+    return pad(val.getHours(), '0', 2) + ":" + pad(val.getMinutes(), '0', 2) + ":" + pad(val.getSeconds(), '0', 2);
+  }
+
+  function pad(val, str, count) {
+    var strVal = val.toString();
+    for (var x = 0; x < count - strVal.length; x++) {
+      strVal = str + strVal;
+    }
+    return strVal;
   }
 
 </script>
