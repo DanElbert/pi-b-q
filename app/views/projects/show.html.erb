@@ -46,46 +46,56 @@
   renewData();
 
   function renewData() {
-    $.getJSON('<%= project_data_path(@project) %>', {after: newestTimestamp}, function (json) {
-
-      if (json.connected) {
-        $("#status").removeClass().addClass("glyphicon glyphicon-transfer good");
-      } else {
-        $("#status").removeClass().addClass("glyphicon glyphicon-ban-circle bad");
+    $.ajax({
+      dataType: "json",
+      url: '<%= project_data_path(@project) %>',
+      data: {after: newestTimestamp},
+      success: function (json) {
+        processData(json);
+        setTimeout(renewData, 2000);
+      },
+      error: function(jqXHR, status, err) {
+        $("#status").removeClass().addClass("glyphicon glyphicon-globe bad");
+        setTimeout(renewData, 2000);
       }
-
-      if (json.readings.length > 0) {
-        var mappedData = _.map(json.readings, function(r) {
-          return [new Date(r.timestamp), to_f(r.value1), to_f(r.value2)];
-        });
-
-        if (data == null) {
-          data = mappedData;
-        } else {
-          data = data.concat(mappedData);
-        }
-
-        var lastReading = data[data.length - 1];
-
-        if (lastReading) {
-          newestTimestamp = lastReading[0];
-          $("#reading1").html(round(lastReading[1]));
-          $("#reading2").html(round(lastReading[2]));
-          $("#last_update").html("Last Update: " + formatTime(lastReading[0]));
-        }
-
-        if (graph == null) {
-          buildGraph();
-          lastGraphRefresh = Date.now();
-        } else if ((Date.now() - lastGraphRefresh) >= graphRefreshInterval) {
-          graph.updateOptions({file: data});
-          lastGraphRefresh = Date.now();
-        }
-      }
-
-      setTimeout(renewData, 2000);
-
     });
+  }
+
+  function processData(json) {
+    if (json.connected) {
+      $("#status").removeClass().addClass("glyphicon glyphicon-transfer good");
+    } else {
+      $("#status").removeClass().addClass("glyphicon glyphicon-ban-circle bad");
+    }
+
+    if (json.readings.length > 0) {
+      var mappedData = _.map(json.readings, function (r) {
+        return [new Date(r.timestamp), to_f(r.value1), to_f(r.value2)];
+      });
+
+      if (data == null) {
+        data = mappedData;
+      } else {
+        data = data.concat(mappedData);
+      }
+
+      var lastReading = data[data.length - 1];
+
+      if (lastReading) {
+        newestTimestamp = lastReading[0];
+        $("#reading1").html(round(lastReading[1]));
+        $("#reading2").html(round(lastReading[2]));
+        $("#last_update").html("Last Update: " + formatTime(lastReading[0]));
+      }
+
+      if (graph == null) {
+        buildGraph();
+        lastGraphRefresh = Date.now();
+      } else if ((Date.now() - lastGraphRefresh) >= graphRefreshInterval) {
+        graph.updateOptions({file: data});
+        lastGraphRefresh = Date.now();
+      }
+    }
   }
 
   function buildGraph() {
