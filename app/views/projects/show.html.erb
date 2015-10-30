@@ -1,23 +1,21 @@
 
 <div id="header" class="row">
-  <div class="col-xs-4 col-sm-3 col-md-2">
-    <h3>
+  <div class="col-xs-4 col-sm-2 col-md-2">
+    <h1>
       <%= link_to @project.name, root_path %>
-    </h3>
+    </h1>
   </div>
-  <div class="col-xs-4 col-sm-2 col-lg-1">
+  <div class="readings col-xs-3 col-sm-2 col-lg-1">
     <button class="btn btn-primary" type="button">
       <%= @project.sensor1_name %> <span id="reading1" class="badge"></span>
     </button>
-  </div>
-  <div class="col-xs-4 col-sm-2 col-lg-1">
     <button class="btn btn-primary" type="button">
       <%= @project.sensor2_name %> <span id="reading2" class="badge"></span>
     </button>
   </div>
 
-  <div class="col-xs-4 col-sm-2">
-    <span id="last_update"></span>
+  <div class="col-xs-2 col-sm-2">
+    <span title="Last Updated" id="last_update"></span>
   </div>
 
   <div class="col-xs-1">
@@ -85,7 +83,7 @@
         newestTimestamp = lastReading[0];
         $("#reading1").html(round(lastReading[1]));
         $("#reading2").html(round(lastReading[2]));
-        $("#last_update").html("Last Update: " + formatTime(lastReading[0]));
+        $("#last_update").html(formatTime(lastReading[0]));
       }
 
       if (graph == null) {

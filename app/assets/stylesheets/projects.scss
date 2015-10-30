@@ -9,6 +9,23 @@
   a {
     color: #fff;
   }
+
+  h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 22px;
+  }
+
+  .readings {
+    button {
+      padding: 4px;
+    }
+  }
+}
+
+#last_update {
+  display: block;
+  margin: 8px 0 0 0;
 }
 
 #status {
