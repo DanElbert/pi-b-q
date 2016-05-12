@@ -11,7 +11,7 @@
 
 #PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
-CMD="source /usr/local/rvm/scripts/rvm && rvm use 2.2.1 && /var/www/pi-b-q/bin/web_control"
+CMD="source /usr/local/rvm/scripts/rvm && rvm use 2.2.1 && bundle exec /var/www/pi-b-q/bin/web_control"
 APP_DIR="/var/www/pi-b-q"
 APP_NAME="pi-b-q web"
 USER="pi"
