@@ -28,6 +28,9 @@ bundle install
 cp /var/www/pi-b-q/pi_config/harvester_init.sh /var/www/pi-b-q/pi_config/web_init.sh /etc/init.d/
 chmod +x /etc/init.d/harvester_init.sh /etc/init.d/web_init.sh
 
+update-rc.d harvester_init.sh defaults
+update-rc.d web_init.sh defaults
+
 # Create DB
 RAILS_ENV=production rake db:create db:migrate
 
